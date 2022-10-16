@@ -843,6 +843,8 @@ class Commands(object):
         """Check for java and setup the proper directory if needed"""
         results = []
         if self.osname == 'win':
+            if not results and os.getenv("JAVA_HOME") != None:
+                results.extend(whereis('javac.exe', os.getenv("JAVA_HOME")))
             if not results:
                 import _winreg
 
@@ -868,8 +870,6 @@ class Commands(object):
                     results.append('')
                 except (CalledProcessError, OSError):
                     pass
-            if not results and os.getenv("JAVA_HOME") != None:
-                results.extend(whereis('javac.exe', os.getenv("JAVA_HOME")))
             if not results and 'ProgramW6432' in os.environ:
                 results.extend(whereis('javac.exe', os.environ['ProgramW6432']))
             if not results and 'ProgramFiles' in os.environ:
